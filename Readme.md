@@ -12,3 +12,8 @@ Source: [GitHub](https://github.com/CogComp/MATRES)
 Newspaper articles annotates with TimeML tags
 
 Source: [Kaggle](https://www.kaggle.com/datasets/poznyakovskiy/tempeval-3-platinum)
+
+### Aquaint
+Newspaper articles annotates with TimeML tags
+
+Source: [GitHub](https://github.com/qiangning/StructTempRel-EMNLP17/tree/master/data/TempEval3/Training/TBAQ-cleaned/AQUAINT)

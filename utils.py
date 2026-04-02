@@ -181,6 +181,30 @@ def create_data_loader(df: pd.DataFrame, tokenizer: tf.AutoTokenizer, batch_size
     print("labels shape:", labels.shape)
     return torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=True)
 
+def create_evaluation_loader(df: pd.DataFrame, tokenizer: tf.AutoTokenizer, batch_size=16):
+    encodings = tokenizer(
+        df["context_window"].tolist(),
+        padding=True,
+        truncation=True,
+        max_length=512,
+        return_tensors="pt"
+    )
+
+    dataset = torch.utils.data.TensorDataset(
+        encodings["input_ids"],
+        encodings["attention_mask"]
+    )
+
+    t1_id = tokenizer.convert_tokens_to_ids("[T1]")
+    t2_id = tokenizer.convert_tokens_to_ids("[T2]")
+
+    ids = encodings["input_ids"][0].tolist()
+    assert t1_id in ids and t2_id in ids, "Truncated away a target event!"
+
+    print("input_ids shape:", encodings["input_ids"].shape)
+    print("attention_mask shape:", encodings["attention_mask"].shape)
+    return torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=True)
+
 def decode_ids(tokenizer: tf.AutoTokenizer, token_ids, skip_special_tokens=False) -> str:
     if isinstance(token_ids, torch.Tensor):
         token_ids = token_ids.tolist()

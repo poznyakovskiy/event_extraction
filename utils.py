@@ -155,7 +155,7 @@ def augment_data(df: pd.DataFrame, verbose=False) -> pd.DataFrame:
 
     return new_df
 
-def create_data_loader(df: pd.DataFrame, tokenizer: tf.AutoTokenizer, batch_size=16):
+def create_data_loader(df: pd.DataFrame, tokenizer: tf.AutoTokenizer, batch_size=16, shuffle=True):
     encodings = tokenizer(
         df["context_window"].tolist(),
         padding=True,
@@ -179,7 +179,7 @@ def create_data_loader(df: pd.DataFrame, tokenizer: tf.AutoTokenizer, batch_size
     print("input_ids shape:", encodings["input_ids"].shape)
     print("attention_mask shape:", encodings["attention_mask"].shape)
     print("labels shape:", labels.shape)
-    return torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=True)
+    return torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
 
 def create_evaluation_loader(df: pd.DataFrame, tokenizer: tf.AutoTokenizer, batch_size=16):
     encodings = tokenizer(
@@ -203,7 +203,7 @@ def create_evaluation_loader(df: pd.DataFrame, tokenizer: tf.AutoTokenizer, batc
 
     print("input_ids shape:", encodings["input_ids"].shape)
     print("attention_mask shape:", encodings["attention_mask"].shape)
-    return torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=True)
+    return torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=False)
 
 def decode_ids(tokenizer: tf.AutoTokenizer, token_ids, skip_special_tokens=False) -> str:
     if isinstance(token_ids, torch.Tensor):

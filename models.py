@@ -20,14 +20,11 @@ class TemporalRelationsModel(torch.nn.Module):
         self.t2_id = tokenizer.convert_tokens_to_ids(t2)
 
         hidden_size = self.roberta.config.hidden_size
-        hidden_dropout_prob = self.roberta.config.hidden_dropout_prob
 
-        self.dropout = torch.nn.Dropout(hidden_dropout_prob)
         self.classifier = torch.nn.Linear(hidden_size * 4, num_labels)
 
     def forward(self, input_ids, attention_mask):
         outputs = self.roberta(input_ids=input_ids, attention_mask=attention_mask)
-        # cls_output = self.dropout(outputs.last_hidden_state[:, 0, :])
 
         hidden = outputs.last_hidden_state
         t1_mask = (input_ids == self.t1_id)
